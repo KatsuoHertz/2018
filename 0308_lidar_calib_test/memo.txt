@@ -1,0 +1,43 @@
+2018.3.11
+
+python make_3d_plane_pts.py 60 30 400 > test.txt
+python make_3d_plane_pts.py 60 30 400 -rotate 1 0 0 50 > test2.txt
+python make_3d_plane_pts.py 60 30 400 -rotate 0 0 1 60 > test3.txt
+
+python rt_3d_pts.py test.txt RT.txt > testRT.txt
+python rt_3d_pts.py test2.txt RT.txt > testRT2.txt
+python rt_3d_pts.py test3.txt RT.txt > testRT3.txt
+
+python rt_3d_pts.py test.txt RT.txt -noise_sigma 0.5 > testRT.txt
+python rt_3d_pts.py test2.txt RT.txt -noise_sigma 0.5 > testRT2.txt
+python rt_3d_pts.py test3.txt RT.txt -noise_sigma 0.5 > testRT3.txt
+
+python plane_fit_ransac.py test.txt coef.txt -ransac_num 100000
+python plane_fit_ransac.py test2.txt coef2.txt -ransac_num 100000
+python plane_fit_ransac.py test3.txt coef3.txt -ransac_num 100000
+
+python plane_fit_ransac.py testRT.txt coefRT.txt -ransac_num 100000
+python plane_fit_ransac.py testRT2.txt coefRT2.txt -ransac_num 100000
+python plane_fit_ransac.py testRT3.txt coefRT3.txt -ransac_num 100000
+
+cat coef.txt coef2.txt coef3.txt > sensor1.txt
+cat coefRT.txt coefRT2.txt coefRT3.txt > sensor2.txt
+
+python calib_algo_test2.py sensor1.txt sensor2.txt
+
+# noise zero
+python make_3d_plane_pts.py 60 30 400 -noise_sigma_xz 0 -noise_sigma_y 0 > _test.txt
+python make_3d_plane_pts.py 60 30 400 -noise_sigma_xz 0 -noise_sigma_y 0 -rotate 1 0 0 50 > _test2.txt
+python make_3d_plane_pts.py 60 30 400 -noise_sigma_xz 0 -noise_sigma_y 0 -rotate 0 0 1 60 > _test3.txt
+python rt_3d_pts.py _test.txt RT.txt > _testRT.txt
+python rt_3d_pts.py _test2.txt RT.txt > _testRT2.txt
+python rt_3d_pts.py _test3.txt RT.txt > _testRT3.txt
+python plane_fit_ransac.py _test.txt _coef.txt
+python plane_fit_ransac.py _test2.txt _coef2.txt
+python plane_fit_ransac.py _test3.txt _coef3.txt
+python plane_fit_ransac.py _testRT.txt _coefRT.txt
+python plane_fit_ransac.py _testRT2.txt _coefRT2.txt
+python plane_fit_ransac.py _testRT3.txt _coefRT3.txt
+cat _coef.txt _coef2.txt _coef3.txt > _sensor1.txt
+cat _coefRT.txt _coefRT2.txt _coefRT3.txt > _sensor2.txt
+python calib_algo_test2.py _sensor1.txt _sensor2.txt
