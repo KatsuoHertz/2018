@@ -239,7 +239,8 @@ for line in open(input_file_name):
             outf.close()
 
             # gnuplot 用出力
-            print("splot '%s' w p" % out_filename)
+            #print("splot '%s' w p" % out_filename)
+            print("splot '%s/%s' w p" % (out_dir, out_filename))
             print("pause -1")
 
         # フレーム数のカウント
@@ -247,4 +248,3 @@ for line in open(input_file_name):
 
 # EOP
 exit(0)
-
