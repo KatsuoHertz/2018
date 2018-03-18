@@ -1,3 +1,223 @@
+2018.3.19
+
+python make_3d_plane_pts.py 60 30 400 -noise_sigma_xz 1 -noise_sigma_y 5 > sensorA.plane1.txt
+python make_3d_plane_pts.py 60 30 400 -noise_sigma_xz 1 -noise_sigma_y 5 -rotate 1 0 0 50 > sensorA.plane2.txt
+python make_3d_plane_pts.py 60 30 400 -noise_sigma_xz 1 -noise_sigma_y 5 -rotate 0 0 1 60 > sensorA.plane3.txt
+
+python rt_3d_pts2.py sensorA.plane1.txt RT2.txt -noise_sigma 0.5 > sensorB.plane1b.txt
+python rt_3d_pts2.py sensorA.plane2.txt RT2.txt -noise_sigma 0.5 > sensorB.plane2b.txt
+python rt_3d_pts2.py sensorA.plane3.txt RT2.txt -noise_sigma 0.5 > sensorB.plane3b.txt
+
+python plane_fit_ransac2.py sensorA.plane1.txt sensorA.plane1.coef.txt
+python plane_fit_ransac2.py sensorA.plane2.txt sensorA.plane2.coef.txt
+python plane_fit_ransac2.py sensorA.plane3.txt sensorA.plane3.coef.txt
+
+python plane_fit_ransac2.py sensorB.plane1b.txt sensorB.plane1b.coef.txt
+python plane_fit_ransac2.py sensorB.plane2b.txt sensorB.plane2b.coef.txt
+python plane_fit_ransac2.py sensorB.plane3b.txt sensorB.plane3b.coef.txt
+
+python calib_algo_test2.py sensorA.plane1.coef.txt sensorA.plane2.coef.txt sensorA.plane3.coef.txt \
+sensorB.plane1b.coef.txt sensorB.plane2b.coef.txt sensorB.plane3b.coef.txt 
+
+python rt_3d_pts2.py sensorA.plane1.txt RT.txt -noise_sigma 0.5 > sensorB.plane1b.txt
+python rt_3d_pts2.py sensorA.plane2.txt RT.txt -noise_sigma 0.5 > sensorB.plane2b.txt
+python rt_3d_pts2.py sensorA.plane3.txt RT.txt -noise_sigma 0.5 > sensorB.plane3b.txt
+
+python plane_fit_ransac2.py sensorA.plane1.txt sensorA.plane1.coef.txt
+python plane_fit_ransac2.py sensorA.plane2.txt sensorA.plane2.coef.txt
+python plane_fit_ransac2.py sensorA.plane3.txt sensorA.plane3.coef.txt
+
+python plane_fit_ransac2.py sensorB.plane1b.txt sensorB.plane1b.coef.txt
+python plane_fit_ransac2.py sensorB.plane2b.txt sensorB.plane2b.coef.txt
+python plane_fit_ransac2.py sensorB.plane3b.txt sensorB.plane3b.coef.txt
+
+python calib_algo_test2.py sensorA.plane1.coef.txt sensorA.plane2.coef.txt sensorA.plane3.coef.txt \
+sensorB.plane1b.coef.txt sensorB.plane2b.coef.txt sensorB.plane3b.coef.txt 
+
+2018.3.14
+
+z 軸を正に
+
+python make_3d_plane_pts.py 60 30 400 -noise_sigma_xz 0 -noise_sigma_y 0 > sensorA.plane1.txt
+python make_3d_plane_pts.py 60 30 400 -noise_sigma_xz 0 -noise_sigma_y 0 -rotate 1 0 0 50 > sensorA.plane2.txt
+python make_3d_plane_pts.py 60 30 400 -noise_sigma_xz 0 -noise_sigma_y 0 -rotate 0 0 1 60 > sensorA.plane3.txt
+
+python rt_3d_pts2.py sensorA.plane1.txt RT.txt > sensorB.plane1b.txt
+python rt_3d_pts2.py sensorA.plane2.txt RT.txt > sensorB.plane2b.txt
+python rt_3d_pts2.py sensorA.plane3.txt RT.txt > sensorB.plane3b.txt
+
+python plane_fit_ransac2.py sensorA.plane1.txt sensorA.plane1.coef.txt
+python plane_fit_ransac2.py sensorA.plane2.txt sensorA.plane2.coef.txt
+python plane_fit_ransac2.py sensorA.plane3.txt sensorA.plane3.coef.txt
+
+python plane_fit_ransac2.py sensorB.plane1b.txt sensorB.plane1b.coef.txt
+python plane_fit_ransac2.py sensorB.plane2b.txt sensorB.plane2b.coef.txt
+python plane_fit_ransac2.py sensorB.plane3b.txt sensorB.plane3b.coef.txt
+
+cat sensorB.plane*b.coef.txt    
+
+python calib_algo_test2.py sensorA.plane1.coef.txt sensorA.plane2.coef.txt sensorA.plane3.coef.txt \
+sensorB.plane1b.coef.txt sensorB.plane2b.coef.txt sensorB.plane3b.coef.txt 
+
+=> OK
+
+違う RT で
+
+python rt_3d_pts2.py sensorA.plane1.txt RT2.txt > sensorB.plane1b.txt
+python rt_3d_pts2.py sensorA.plane2.txt RT2.txt > sensorB.plane2b.txt
+python rt_3d_pts2.py sensorA.plane3.txt RT2.txt > sensorB.plane3b.txt
+
+python plane_fit_ransac2.py sensorB.plane1b.txt sensorB.plane1b.coef.txt
+python plane_fit_ransac2.py sensorB.plane2b.txt sensorB.plane2b.coef.txt
+python plane_fit_ransac2.py sensorB.plane3b.txt sensorB.plane3b.coef.txt
+
+cat sensorB.plane*b.coef.txt    
+
+python calib_algo_test2.py sensorA.plane1.coef.txt sensorA.plane2.coef.txt sensorA.plane3.coef.txt \
+sensorB.plane1b.coef.txt sensorB.plane2b.coef.txt sensorB.plane3b.coef.txt 
+
+=> OK 
+
+ノイズ付加
+
+python make_3d_plane_pts.py 60 30 400 -noise_sigma_xz 1 -noise_sigma_y 5 > sensorA.plane1.txt
+python make_3d_plane_pts.py 60 30 400 -noise_sigma_xz 1 -noise_sigma_y 5 -rotate 1 0 0 50 > sensorA.plane2.txt
+python make_3d_plane_pts.py 60 30 400 -noise_sigma_xz 1 -noise_sigma_y 5 -rotate 0 0 1 60 > sensorA.plane3.txt
+
+python rt_3d_pts2.py sensorA.plane1.txt RT2.txt -noise_sigma 1 > sensorB.plane1b.txt
+python rt_3d_pts2.py sensorA.plane2.txt RT2.txt -noise_sigma 1 > sensorB.plane2b.txt
+python rt_3d_pts2.py sensorA.plane3.txt RT2.txt -noise_sigma 1 > sensorB.plane3b.txt
+
+python plane_fit_ransac2.py sensorA.plane1.txt sensorA.plane1.coef.txt
+python plane_fit_ransac2.py sensorA.plane2.txt sensorA.plane2.coef.txt
+python plane_fit_ransac2.py sensorA.plane3.txt sensorA.plane3.coef.txt
+
+python plane_fit_ransac2.py sensorB.plane1b.txt sensorB.plane1b.coef.txt
+python plane_fit_ransac2.py sensorB.plane2b.txt sensorB.plane2b.coef.txt
+python plane_fit_ransac2.py sensorB.plane3b.txt sensorB.plane3b.coef.txt
+
+cat sensorB.plane*b.coef.txt    
+
+python calib_algo_test2.py sensorA.plane1.coef.txt sensorA.plane2.coef.txt sensorA.plane3.coef.txt \
+sensorB.plane1b.coef.txt sensorB.plane2b.coef.txt sensorB.plane3b.coef.txt 
+
+
+2018.3.13
+
+python make_3d_plane_pts.py 60 30 400 -noise_sigma_xz 0 -noise_sigma_y 0 > sensorA.plane1.txt
+python make_3d_plane_pts.py 60 30 400 -noise_sigma_xz 0 -noise_sigma_y 0 -rotate 1 0 0 50 > sensorA.plane2.txt
+python make_3d_plane_pts.py 60 30 400 -noise_sigma_xz 0 -noise_sigma_y 0 -rotate 0 0 1 60 > sensorA.plane3.txt
+
+python rt_3d_pts.py sensorA.plane1.txt RT.txt > sensorB.plane1.txt
+python rt_3d_pts.py sensorA.plane2.txt RT.txt > sensorB.plane2.txt
+python rt_3d_pts.py sensorA.plane3.txt RT.txt > sensorB.plane3.txt
+
+python plane_fit_ransac.py sensorA.plane1.txt sensorA.plane1.coef.txt
+python plane_fit_ransac.py sensorA.plane2.txt sensorA.plane2.coef.txt
+python plane_fit_ransac.py sensorA.plane3.txt sensorA.plane3.coef.txt
+
+python plane_fit_ransac.py sensorB.plane1.txt sensorB.plane1.coef.txt
+python plane_fit_ransac.py sensorB.plane2.txt sensorB.plane2.coef.txt
+python plane_fit_ransac.py sensorB.plane3.txt sensorB.plane3.coef.txt
+
+平面の方程式の係数
+sensorA:
+0.750000 0.433013 0.500000 -400.000000 0.000015
+0.150384 0.086824 0.984808 -257.115040 0.000013
+-0.058013 0.966506 0.250000 -200.000000 0.000018
+sensorB:
+-0.433013 0.750000 0.500000 -303.349365 0.000015
+-0.086824 0.150384 0.984808 -237.735464 0.000013
+0.966506 0.058013 -0.250000 157.475952 0.000018
+ansB:
+0.433013	-0.75		0.5			-405.8013 0.0
+0.086824	-0.150384	0.984808	-258.27824 0.0
+0.966506	0.058013	0.25		-299.55125	0.0
+
+
+RT
+0 -1  0   50
+1  0  0	-100
+0  0  1    0
+
+RT 計算
+python calib_algo_test2.py sensorA.plane1.coef.txt sensorA.plane2.coef.txt sensorA.plane3.coef.txt ansB.plane1.coef.txt ansB.plane2.coef.txt ansB.plane3.coef.txt
+python calib_algo_test2.py sensorA.plane1.coef.txt sensorA.plane2.coef.txt sensorA.plane3.coef.txt sensorB.plane1.coef.txt sensorB.plane2.coef.txt sensorB.plane3.coef.txt
+
+python rt_3d_pts2.py sensorA.plane1.txt RT.txt > sensorB.plane1b.txt
+python rt_3d_pts2.py sensorA.plane2.txt RT.txt > sensorB.plane2b.txt
+python rt_3d_pts2.py sensorA.plane3.txt RT.txt > sensorB.plane3b.txt
+
+python plane_fit_ransac.py sensorB.plane1b.txt sensorB.plane1b.coef.txt
+python plane_fit_ransac.py sensorB.plane2b.txt sensorB.plane2b.coef.txt
+python plane_fit_ransac.py sensorB.plane3b.txt sensorB.plane3b.coef.txt
+
+sensorB:
+-0.433013 0.750000 -0.500000 405.801270 0.000015
+-0.086824 0.150384 -0.984808 258.278263 0.000013
+0.966506 0.058013 0.250000 -299.551270 0.000018
+
+→ 法線ベクトルの方向問題
+
+python calib_algo_test2.py sensorA.plane1.coef.txt sensorA.plane2.coef.txt sensorA.plane3.coef.txt sensorB.plane1b.coef.txt sensorB.plane2b.coef.txt sensorB.plane3b.coef.txt
+python calib_algo_test2.py sensorA.plane1.coef.txt sensorA.plane2.coef.txt sensorA.plane3.coef.txt sensorB.plane1c.coef.txt sensorB.plane2c.coef.txt sensorB.plane3b.coef.txt
+
+少しノイズ
+
+python make_3d_plane_pts.py 60 30 400 -noise_sigma_xz 1 -noise_sigma_y 10 > sensorA.plane1.txt
+python make_3d_plane_pts.py 60 30 400 -noise_sigma_xz 1 -noise_sigma_y 10 -rotate 1 0 0 50 > sensorA.plane2.txt
+python make_3d_plane_pts.py 60 30 400 -noise_sigma_xz 1 -noise_sigma_y 10 -rotate 0 0 1 60 > sensorA.plane3.txt
+
+python rt_3d_pts2.py sensorA.plane1.txt RT.txt > sensorB.plane1b.txt
+python rt_3d_pts2.py sensorA.plane2.txt RT.txt > sensorB.plane2b.txt
+python rt_3d_pts2.py sensorA.plane3.txt RT.txt > sensorB.plane3b.txt
+
+python plane_fit_ransac.py sensorA.plane1.txt sensorA.plane1.coef.txt
+python plane_fit_ransac.py sensorA.plane2.txt sensorA.plane2.coef.txt
+python plane_fit_ransac.py sensorA.plane3.txt sensorA.plane3.coef.txt
+
+python plane_fit_ransac.py sensorB.plane1b.txt sensorB.plane1b.coef.txt
+python plane_fit_ransac.py sensorB.plane2b.txt sensorB.plane2b.coef.txt
+python plane_fit_ransac.py sensorB.plane3b.txt sensorB.plane3b.coef.txt
+
+python calib_algo_test2.py sensorA.plane1.coef.txt sensorA.plane2.coef.txt sensorA.plane3.coef.txt \
+sensorB.plane1b.coef.txt sensorB.plane2b.coef.txt sensorB.plane3b.coef.txt -sign_flip 1 0 0
+
+python calib_algo_test2.py sensorA.plane1.coef.txt sensorA.plane2.coef.txt sensorA.plane3.coef.txt sensorB.plane1c.coef.txt sensorB.plane2c.coef.txt sensorB.plane3b.coef.txt
+
+違う RT
+
+python make_3d_plane_pts.py 60 30 400 -noise_sigma_xz 0 -noise_sigma_y 0 > sensorA.plane1.txt
+python make_3d_plane_pts.py 60 30 400 -noise_sigma_xz 0 -noise_sigma_y 0 -rotate 1 0 0 50 > sensorA.plane2.txt
+python make_3d_plane_pts.py 60 30 400 -noise_sigma_xz 0 -noise_sigma_y 0 -rotate 0 0 1 60 > sensorA.plane3.txt
+
+python rt_3d_pts2.py sensorA.plane1.txt RT2.txt > sensorB.plane1b.txt
+python rt_3d_pts2.py sensorA.plane2.txt RT2.txt > sensorB.plane2b.txt
+python rt_3d_pts2.py sensorA.plane3.txt RT2.txt > sensorB.plane3b.txt
+
+python plane_fit_ransac.py sensorB.plane1b.txt sensorB.plane1b.coef.txt
+python plane_fit_ransac.py sensorB.plane2b.txt sensorB.plane2b.coef.txt
+python plane_fit_ransac.py sensorB.plane3b.txt sensorB.plane3b.coef.txt
+
+python calib_algo_test2.py sensorA.plane1.coef.txt sensorA.plane2.coef.txt sensorA.plane3.coef.txt \
+sensorB.plane1b.coef.txt sensorB.plane2b.coef.txt sensorB.plane3b.coef.txt -sign_flip 1 0 1
+
+ノイズ
+
+python make_3d_plane_pts.py 60 30 400 -noise_sigma_xz 1 -noise_sigma_y 5 > sensorA.plane1.txt
+python make_3d_plane_pts.py 60 30 400 -noise_sigma_xz 1 -noise_sigma_y 5 -rotate 1 0 0 50 > sensorA.plane2.txt
+python make_3d_plane_pts.py 60 30 400 -noise_sigma_xz 1 -noise_sigma_y 5 -rotate 0 0 1 60 > sensorA.plane3.txt
+
+python rt_3d_pts2.py sensorA.plane1.txt RT2.txt -noise_sigma 1 > sensorB.plane1b.txt
+python rt_3d_pts2.py sensorA.plane2.txt RT2.txt -noise_sigma 1 > sensorB.plane2b.txt
+python rt_3d_pts2.py sensorA.plane3.txt RT2.txt -noise_sigma 1 > sensorB.plane3b.txt
+
+python plane_fit_ransac.py sensorB.plane1b.txt sensorB.plane1b.coef.txt
+python plane_fit_ransac.py sensorB.plane2b.txt sensorB.plane2b.coef.txt
+python plane_fit_ransac.py sensorB.plane3b.txt sensorB.plane3b.coef.txt
+
+
+
 2018.3.11
 
 python make_3d_plane_pts.py 60 30 400 > test.txt

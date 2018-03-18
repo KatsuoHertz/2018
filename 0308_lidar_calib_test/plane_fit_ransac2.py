@@ -101,8 +101,8 @@ for i in range(ransac_num):
     c /= vlen
     d /= vlen
 
-    # y 方向の単位ベクトルは必ず正とする
-    if b < 0:
+    # z 方向の単位ベクトルは必ず正とする
+    if c < 0:
         a *= -1
         b *= -1
         c *= -1

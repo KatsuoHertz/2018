@@ -1,3 +1,5 @@
+# -*- coding: UTF-8 -*-
+
 import numpy as np
 
 # 正解 R, T

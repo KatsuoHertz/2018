@@ -8,6 +8,7 @@ if len(sys.argv) == 1:
     print("")
     print("点群データを回転＆平行移動する。")
     print("[R|T] をファイルで与える。3 x 4 行列、スペース区切り")
+    print("Y = R^-1(X-T) 版")
     print("")
     print("[Usage] %s pts.txt RT.txt [Options]" % sys.argv[0])
     print("")
@@ -67,9 +68,12 @@ for line in open(rt_file):
 
 #print(R, T)
 
+R2 = np.linalg.inv(R)
+
 # 点群を変換
 for p in pts:
-    p2 = np.dot(R, p) + T
+    #p2 = np.dot(R, p) + T
+    p2 = np.dot(R2, p - T)
     # ノイズ付加
     if noise_sigma > 0:
         p2[0] += noise_sigma * (np.random.rand() - 0.5) * 2
