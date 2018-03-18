@@ -1,41 +1,43 @@
-# -*- coding: ShiftJIS -*-
+ï»¿# -*- coding: UTF-8 -*-
 import sys
 import os
 import math
 
-# g‚¢•û
+# ä½¿ã„æ–¹
 if len(sys.argv) == 1:
     print("")
-    print("Fran.exe ‚â LidarGen5.exe ‚Å•Û‘¶‚µ‚½ LiDAR ‚Ì‹——£ƒf[ƒ^(csv ƒtƒ@ƒCƒ‹j")
-    print("‚ğ“Ç‚İ‚ñ‚ÅAx y z ‚Ì 3 ŸŒ³“_ŒQÀ•W’l‚ğo—Í")
-    print("…•½•ûŒü‚ª x A‚’¼•ûŒü‚ª zA‰œs‚«•ûŒü‚ª y")
+    print("Fran.exe ã‚„ LidarGen5.exe ã§ä¿å­˜ã—ãŸ LiDAR ã®è·é›¢ãƒ‡ãƒ¼ã‚¿(csv ãƒ•ã‚¡ã‚¤ãƒ«ï¼‰")
+    print("ã‚’èª­ã¿è¾¼ã‚“ã§ã€x y z ã® 3 æ¬¡å…ƒç‚¹ç¾¤åº§æ¨™å€¤ã‚’å‡ºåŠ›")
+    print("æ°´å¹³æ–¹å‘ãŒ x ã€å‚ç›´æ–¹å‘ãŒ zã€å¥¥è¡Œãæ–¹å‘ãŒ y")
     print("")
     print("[Usage] %s depth.csv [Options]" % sys.argv[0])
     print("")
     print("Options:")
-    print("-frame frame_index: w’è‚µ‚½ƒtƒŒ[ƒ€‚Ì‚İo—ÍB0 n‚Ü‚è‚Ì”Ô†")
-    print("-out_dir dir_name: o—ÍƒtƒHƒ‹ƒ_‚Ìw’èB–³‚¯‚ê‚Îì‚éBƒfƒtƒHƒ‹ƒg‚Í out")
-    print("-xrange x_min x_max: x_min < x < x_max ‚È“_‚¾‚¯o—Í")
-    print("-yrange y_min y_max: ã‚Æ“¯—l")
-    print("-zrange z_min z_max: ã‚Æ“¯—l")
+    print("-frame frame_index: æŒ‡å®šã—ãŸãƒ•ãƒ¬ãƒ¼ãƒ ã®ã¿å‡ºåŠ›ã€‚0 å§‹ã¾ã‚Šã®ç•ªå·")
+    print("-out_dir dir_name: å‡ºåŠ›ãƒ•ã‚©ãƒ«ãƒ€ã®æŒ‡å®šã€‚ç„¡ã‘ã‚Œã°ä½œã‚‹ã€‚ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã¯ out")
+    print("-xrange x_min x_max: x_min < x < x_max ãªç‚¹ã ã‘å‡ºåŠ›")
+    print("-yrange y_min y_max: ä¸Šã¨åŒæ§˜")
+    print("-zrange z_min z_max: ä¸Šã¨åŒæ§˜")
+    print("-start_frame (int): å‡¦ç†é–‹å§‹ãƒ•ãƒ¬ãƒ¼ãƒ ã®æŒ‡å®š")
+    print("-end_frame (int): å‡¦ç†çµ‚äº†ãƒ•ãƒ¬ãƒ¼ãƒ ã®æŒ‡å®šï¼ˆã“ã®ãƒ•ãƒ¬ãƒ¼ãƒ ã¯å«ã¾ãšï¼‰")
     print("")
     exit(0)
 
 # -------------------------------------------------------------------------------------
-# İ’è
+# è¨­å®š
 # -------------------------------------------------------------------------------------
 
-# ‘SƒtƒŒ[ƒ€o—Í‚Ìo—ÍƒfƒBƒŒƒNƒgƒŠ
+# å…¨ãƒ•ãƒ¬ãƒ¼ãƒ å‡ºåŠ›æ™‚ã®å‡ºåŠ›ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒª
 OUT_DIR = "out"
 
-# ‘SƒtƒŒ[ƒ€o—Í‚Ìƒtƒ@ƒCƒ‹–¼‘®
+# å…¨ãƒ•ãƒ¬ãƒ¼ãƒ å‡ºåŠ›æ™‚ã®ãƒ•ã‚¡ã‚¤ãƒ«åæ›¸å¼
 OUT_FILE = "%04d.txt"
 
 # -------------------------------------------------------------------------------------
-# ŠÖ”
+# é–¢æ•°
 # -------------------------------------------------------------------------------------
 
-# w’è‚µ‚½•¶š—ñ‚ªˆø”ƒŠƒXƒg‚Ì’†‚É‚ ‚é‚©ƒ`ƒFƒbƒN
+# æŒ‡å®šã—ãŸæ–‡å­—åˆ—ãŒå¼•æ•°ãƒªã‚¹ãƒˆã®ä¸­ã«ã‚ã‚‹ã‹ãƒã‚§ãƒƒã‚¯
 def foundOpt( argv, opt, idx = []):
     if opt in argv:
         if len(idx) > 0:
@@ -46,82 +48,82 @@ def foundOpt( argv, opt, idx = []):
     else:
         return False
 
-# ƒJƒ“ƒ}‹æØ‚è‚Ì 1 s‚Ì‹——£ƒf[ƒ^‚ğOŸŒ³“_ŒQÀ•W’l‚É“WŠJ
-#E3ŸŒ³À•W’l‚ÌƒŠƒXƒg‚ğ•Ô‚·
-#E—^‚¦‚ç‚ê‚½•¶š—ñ‚ª–³Œø‚ÈƒtƒH[ƒ}ƒbƒg‚Å‚ ‚ê‚Î‹ó‚ÌƒŠƒXƒg‚ğ•Ô‚·
+# ã‚«ãƒ³ãƒåŒºåˆ‡ã‚Šã® 1 è¡Œã®è·é›¢ãƒ‡ãƒ¼ã‚¿ã‚’ä¸‰æ¬¡å…ƒç‚¹ç¾¤åº§æ¨™å€¤ã«å±•é–‹
+#ãƒ»3æ¬¡å…ƒåº§æ¨™å€¤ã®ãƒªã‚¹ãƒˆã‚’è¿”ã™
+#ãƒ»ä¸ãˆã‚‰ã‚ŒãŸæ–‡å­—åˆ—ãŒç„¡åŠ¹ãªãƒ•ã‚©ãƒ¼ãƒãƒƒãƒˆã§ã‚ã‚Œã°ç©ºã®ãƒªã‚¹ãƒˆã‚’è¿”ã™
 def expandTo3d( 
-    line_str, # ƒJƒ“ƒ}‹æØ‚è‚Ì 1 s‚Ì‹——£ƒf[ƒ^
-    sensor_h_cols = 141, # ƒZƒ“ƒT[‚Ì…•½‰æ‘f”
-    sensor_h_angle_start = -70.0, # ƒZƒ“ƒT[‚Ìˆê”Ô¶‚Ì—ñ‚Ì•ûˆÊŠp [deg]
-    sensor_h_angle_step = 1.0, # ƒZƒ“ƒT[‚Ì…•½•ª‰ğ”\ [deg]
-    sensor_v_lines = ( # ƒZƒ“ƒT[‚Ìƒ‰ƒCƒ“–ˆ‚Ì‚’¼•ª‰ğ”\
+    line_str, # ã‚«ãƒ³ãƒåŒºåˆ‡ã‚Šã® 1 è¡Œã®è·é›¢ãƒ‡ãƒ¼ã‚¿
+    sensor_h_cols = 141, # ã‚»ãƒ³ã‚µãƒ¼ã®æ°´å¹³ç”»ç´ æ•°
+    sensor_h_angle_start = -70.0, # ã‚»ãƒ³ã‚µãƒ¼ã®ä¸€ç•ªå·¦ã®åˆ—ã®æ–¹ä½è§’ [deg]
+    sensor_h_angle_step = 1.0, # ã‚»ãƒ³ã‚µãƒ¼ã®æ°´å¹³åˆ†è§£èƒ½ [deg]
+    sensor_v_lines = ( # ã‚»ãƒ³ã‚µãƒ¼ã®ãƒ©ã‚¤ãƒ³æ¯ã®å‚ç›´åˆ†è§£èƒ½
         1.2, 1.2, 1.2, 1.2, 1.2, 1.2, 
         0.6, 0.6, 
         0.3, 0.3, 0.3, 0.3, 0.3, 0.3, 0.3, 0.3, 0.3, 0.3, 0.3, 0.3, 0.3, 0.3, 0.3, 0.3, 0.3, 0.3, 0.3, 0.3, 
         1.2, 1.2, 1.2, 1.2
     ), 
-    sensor_v_angle_start = 9.4, # ƒZƒ“ƒT[‚Ìˆê”Ôã‚Ìƒ‰ƒCƒ“‚Ì‹ÂŠp [deg]
-    big_dist_val = 16000, # ‹——£’l‚ÌˆÙí’lF‚±‚Ì’l‚æ‚è‘å‚«‚È’l‚Í 0 ‚É‚·‚é
-    x_range_min = None, # x À•W’l‚ª‚±‚Ì’l‚æ‚è¬‚³‚¢“_‚Ío—Í‚µ‚È‚¢
-    x_range_max = None, # x À•W’l‚ª‚±‚Ì’l‚æ‚è‘å‚«‚¢“_‚Ío—Í‚µ‚È‚¢
-    y_range_min = None, # y À•W’l‚ª‚±‚Ì’l‚æ‚è¬‚³‚¢“_‚Ío—Í‚µ‚È‚¢
-    y_range_max = None, # y À•W’l‚ª‚±‚Ì’l‚æ‚è‘å‚«‚¢“_‚Ío—Í‚µ‚È‚¢
-    z_range_min = None, # z À•W’l‚ª‚±‚Ì’l‚æ‚è¬‚³‚¢“_‚Ío—Í‚µ‚È‚¢
-    z_range_max = None, # z À•W’l‚ª‚±‚Ì’l‚æ‚è‘å‚«‚¢“_‚Ío—Í‚µ‚È‚¢
+    sensor_v_angle_start = 9.4, # ã‚»ãƒ³ã‚µãƒ¼ã®ä¸€ç•ªä¸Šã®ãƒ©ã‚¤ãƒ³ã®ä»°è§’ [deg]
+    big_dist_val = 16000, # è·é›¢å€¤ã®ç•°å¸¸å€¤ï¼šã“ã®å€¤ã‚ˆã‚Šå¤§ããªå€¤ã¯ 0 ã«ã™ã‚‹
+    x_range_min = None, # x åº§æ¨™å€¤ãŒã“ã®å€¤ã‚ˆã‚Šå°ã•ã„ç‚¹ã¯å‡ºåŠ›ã—ãªã„
+    x_range_max = None, # x åº§æ¨™å€¤ãŒã“ã®å€¤ã‚ˆã‚Šå¤§ãã„ç‚¹ã¯å‡ºåŠ›ã—ãªã„
+    y_range_min = None, # y åº§æ¨™å€¤ãŒã“ã®å€¤ã‚ˆã‚Šå°ã•ã„ç‚¹ã¯å‡ºåŠ›ã—ãªã„
+    y_range_max = None, # y åº§æ¨™å€¤ãŒã“ã®å€¤ã‚ˆã‚Šå¤§ãã„ç‚¹ã¯å‡ºåŠ›ã—ãªã„
+    z_range_min = None, # z åº§æ¨™å€¤ãŒã“ã®å€¤ã‚ˆã‚Šå°ã•ã„ç‚¹ã¯å‡ºåŠ›ã—ãªã„
+    z_range_max = None, # z åº§æ¨™å€¤ãŒã“ã®å€¤ã‚ˆã‚Šå¤§ãã„ç‚¹ã¯å‡ºåŠ›ã—ãªã„
      ):
 
-    # •Ô‚è’l
+    # è¿”ã‚Šå€¤
     pointList = []
 
-    # …•½‰æ‘f”
+    # æ°´å¹³ç”»ç´ æ•°
     width = sensor_h_cols
 
-    # ‚’¼‰æ‘f”
+    # å‚ç›´ç”»ç´ æ•°
     height = len(sensor_v_lines)
 
-    # csv ƒtƒ@ƒCƒ‹‚Ì—ñ”
+    # csv ãƒ•ã‚¡ã‚¤ãƒ«ã®åˆ—æ•°
     num_cols = width * height + 1
 
-    # ƒJƒ“ƒ}‚Å—ñ•ªŠ„
+    # ã‚«ãƒ³ãƒã§åˆ—åˆ†å‰²
     la = line_str.split(',')
 
-    # —ñ”‚ªŠ’è‚Ì”‚¾‚Á‚½‚ç
+    # åˆ—æ•°ãŒæ‰€å®šã®æ•°ã ã£ãŸã‚‰
     if len(la) == num_cols:
 
-        # ‚’¼•ûˆÊŠp [deg]
+        # å‚ç›´æ–¹ä½è§’ [deg]
         pitch_deg = 0.0
 
-        # ƒf[ƒ^“Ç‚İ‚İ
+        # ãƒ‡ãƒ¼ã‚¿èª­ã¿è¾¼ã¿
         for i in range(height):
             for j in range(width):
 
-                # ‹——£’l
+                # è·é›¢å€¤
                 try:
-                    dist = float(la[i * width + j + 1]) # Å‰‚Ì—ñ‚Í”ò‚Î‚·
+                    dist = float(la[i * width + j + 1]) # æœ€åˆã®åˆ—ã¯é£›ã°ã™
                 except:
-                    # ¸”s‚µ‚½‚ç‚»‚±‚ÅI—¹
+                    # å¤±æ•—ã—ãŸã‚‰ãã“ã§çµ‚äº†
                     return []
 
-                # ˆÙí’l‚Í 0 ‚É‚·‚é
+                # ç•°å¸¸å€¤ã¯ 0 ã«ã™ã‚‹
                 if dist > big_dist_val:
                    dist = 0
 
-                # …•½•ûˆÊŠp
+                # æ°´å¹³æ–¹ä½è§’
                 yaw_rad = (sensor_h_angle_start + sensor_h_angle_step * j) * math.pi / 180.0 
 
-                # x À•W’l
+                # x åº§æ¨™å€¤
                 x = dist * math.sin(yaw_rad)
 
-                # y À•W’l
+                # y åº§æ¨™å€¤
                 y = dist * math.cos(yaw_rad)
 
-                # ‚’¼•ûˆÊŠp [rad]
+                # å‚ç›´æ–¹ä½è§’ [rad]
                 pitch_rad = (sensor_v_angle_start - pitch_deg) * math.pi / 180.0
 
-                # z À•W’l
+                # z åº§æ¨™å€¤
                 z = dist * math.sin(pitch_rad)
 
-                # ”ÍˆÍŠOƒ`ƒFƒbƒN
+                # ç¯„å›²å¤–ãƒã‚§ãƒƒã‚¯
                 if (x_range_min != None and x < x_range_min) or \
                     (x_range_max != None and x > x_range_max) or \
                     (y_range_min != None and y < y_range_min) or \
@@ -130,18 +132,18 @@ def expandTo3d(
                     (z_range_max != None and z > z_range_max):
                     continue
 
-                #ƒŠƒXƒg’Ç‰Á
+                #ãƒªã‚¹ãƒˆè¿½åŠ 
                 pointList.append([x, y, z])
 
-            # ‚’¼•ûˆÊŠp‚ÌƒCƒ“ƒNƒŠƒƒ“ƒg
+            # å‚ç›´æ–¹ä½è§’ã®ã‚¤ãƒ³ã‚¯ãƒªãƒ¡ãƒ³ãƒˆ
             pitch_deg += sensor_v_lines[i]
 
     return pointList
 
-# “_ŒQƒf[ƒ^‚Ìo—Í
+# ç‚¹ç¾¤ãƒ‡ãƒ¼ã‚¿ã®å‡ºåŠ›
 def writePointList( 
-    point_list, # 3ŸŒ³À•W’l‚ÌƒŠƒXƒg
-    stream = sys.stdout # o—Íæ
+    point_list, # 3æ¬¡å…ƒåº§æ¨™å€¤ã®ãƒªã‚¹ãƒˆ
+    stream = sys.stdout # å‡ºåŠ›å…ˆ
     ):
     for a in point_list:
         out_str = "%f %f %f \n" % (a[0], a[1], a[2])
@@ -151,10 +153,10 @@ def writePointList(
 # main
 # -------------------------------------------------------------------------------------
 
-# “ü—Íƒtƒ@ƒCƒ‹–¼
+# å…¥åŠ›ãƒ•ã‚¡ã‚¤ãƒ«å
 input_file_name = sys.argv[1]
 
-# ƒtƒŒ[ƒ€”Ô†w’è
+# ãƒ•ãƒ¬ãƒ¼ãƒ ç•ªå·æŒ‡å®š
 single_frame = False
 frame_to_read = 0
 i = []
@@ -162,16 +164,16 @@ if foundOpt(sys.argv, "-frame", i):
     single_frame = True
     frame_to_read = int(sys.argv[i[0] + 1])
 
-# o—ÍƒfƒBƒŒƒNƒgƒŠ
+# å‡ºåŠ›ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒª
 out_dir = OUT_DIR
 if foundOpt(sys.argv, "-out_dir", i):
     out_dir = sys.argv[i[0] + 1]
 
-# ƒfƒBƒŒƒNƒgƒŠA–³‚©‚Á‚½‚çì‚é
+# ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã€ç„¡ã‹ã£ãŸã‚‰ä½œã‚‹
 if not os.path.exists(out_dir):
     os.mkdir(out_dir)
 
-# ”ÍˆÍw’è
+# ç¯„å›²æŒ‡å®š
 x_min = None
 x_max = None
 if foundOpt(sys.argv, "-xrange", i):
@@ -188,62 +190,79 @@ if foundOpt(sys.argv, "-zrange", i):
     z_min = float(sys.argv[i[0] + 1])
     z_max = float(sys.argv[i[0] + 2])
 
-# ƒtƒŒ[ƒ€ƒJƒEƒ“ƒ^[
+# ãƒ•ãƒ¬ãƒ¼ãƒ ç¯„å›²æŒ‡å®š
+start_frame = 0
+if foundOpt(sys.argv, "-start_frame", i):
+    start_frame = int(sys.argv[i[0] + 1])
+end_frame = 0
+if foundOpt(sys.argv, "-end_frame", i):
+    end_frame = int(sys.argv[i[0] + 1])
+
+
+# ãƒ•ãƒ¬ãƒ¼ãƒ ã‚«ã‚¦ãƒ³ã‚¿ãƒ¼
 frame_count = 0
 
-# “ü—Íƒtƒ@ƒCƒ‹‚ğ‚Ps‚¸‚Â“Ç‚İ‚Ş
+# å…¥åŠ›ãƒ•ã‚¡ã‚¤ãƒ«ã‚’ï¼‘è¡Œãšã¤èª­ã¿è¾¼ã‚€
 for line in open(input_file_name):
     
-    # 3ŸŒ³“WŠJ
+    # 3æ¬¡å…ƒå±•é–‹
     pointList = expandTo3d(line,
     x_range_min=x_min, x_range_max=x_max,
     y_range_min=y_min, y_range_max=y_max,
     z_range_min=z_min, z_range_max=z_max,
     )
 
-    # ¬Œ÷‚µ‚½‚ç
+    # æˆåŠŸã—ãŸã‚‰
     if len(pointList) > 0:
 
-        # ’PƒtƒŒ[ƒ€•\¦‚Ìê‡
+        # å˜ãƒ•ãƒ¬ãƒ¼ãƒ è¡¨ç¤ºã®å ´åˆ
         if single_frame:
             
-            # Š’è‚ÌƒtƒŒ[ƒ€”Ô†‚É’B‚µ‚½‚ç
+            # æ‰€å®šã®ãƒ•ãƒ¬ãƒ¼ãƒ ç•ªå·ã«é”ã—ãŸã‚‰
             if frame_count == frame_to_read:
 
-                # ‰æ–Ê‚Éo—Í
+                # ç”»é¢ã«å‡ºåŠ›
                 writePointList(pointList)
 
-                # I—¹
+                # çµ‚äº†
                 break
 
-        # ‘SƒtƒŒ[ƒ€o—Í‚Ìê‡
-        else:
+        # å…¨ãƒ•ãƒ¬ãƒ¼ãƒ å‡ºåŠ›ã®å ´åˆ
+        #else:
+        #elif (end_frame > 0) and (start_frame <= frame_count < end_frame):
+        elif (end_frame == 0) or (start_frame <= frame_count < end_frame):
 
-            # o—Íƒtƒ@ƒCƒ‹–¼
+            # ãƒ•ãƒ¬ãƒ¼ãƒ ç¯„å›²æŒ‡å®š
+#            if frame_count < start_frame:
+                #continue:
+            #elif frame_count >= end_frame:
+             #   break
+
+            # å‡ºåŠ›ãƒ•ã‚¡ã‚¤ãƒ«å
             out_filename = OUT_FILE % frame_count
 
-            # o—Íƒtƒ@ƒCƒ‹–¼ƒtƒ‹ƒpƒX
+            # å‡ºåŠ›ãƒ•ã‚¡ã‚¤ãƒ«åãƒ•ãƒ«ãƒ‘ã‚¹
             out_filepath = "%s/%s" % (out_dir, out_filename)
 
-            # ƒtƒ@ƒCƒ‹‚ğŠJ‚­
+            # ãƒ•ã‚¡ã‚¤ãƒ«ã‚’é–‹ã
             try:
                 outf = open(out_filepath, "w")
             except:
                 print("ERROR: Failed to open the file, " + out_filepath)
                 exit(-1)
 
-            # ‘‚«‚İ
+            # æ›¸ãè¾¼ã¿
             writePointList(pointList, outf)
 
-            # ƒtƒ@ƒCƒ‹‚ğ•Â‚¶‚é
+            # ãƒ•ã‚¡ã‚¤ãƒ«ã‚’é–‰ã˜ã‚‹
             outf.close()
 
-            # gnuplot —po—Í
+            # gnuplot ç”¨å‡ºåŠ›
             #print("splot '%s' w p" % out_filename)
             print("splot '%s/%s' w p" % (out_dir, out_filename))
             print("pause -1")
 
-        # ƒtƒŒ[ƒ€”‚ÌƒJƒEƒ“ƒg
+        # ãƒ•ãƒ¬ãƒ¼ãƒ æ•°ã®ã‚«ã‚¦ãƒ³ãƒˆ
         frame_count += 1
 
 # EOP
