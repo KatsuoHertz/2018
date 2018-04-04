@@ -20,6 +20,8 @@ if len(sys.argv) == 1:
     print("-zrange z_min z_max: 上と同様")
     print("-start_frame (int): 処理開始フレームの指定")
     print("-end_frame (int): 処理終了フレームの指定（このフレームは含まず）")
+    print("-col_range start end: 水平方向の指定した列だけ出力。0～141 で指定。end は含まず。")
+    print("-row_range start end: 垂直方向の指定した行だけ出力。0～32 で指定。end は含まず。")
     print("")
     exit(0)
 
@@ -70,6 +72,10 @@ def expandTo3d(
     y_range_max = None, # y 座標値がこの値より大きい点は出力しない
     z_range_min = None, # z 座標値がこの値より小さい点は出力しない
     z_range_max = None, # z 座標値がこの値より大きい点は出力しない
+    col_range_min = 0, # この列より小さい列は出力しない。
+    col_range_max = 141, # この列以上の列は出力しない。
+    row_range_min = 0, # この行より小さい行は出力しない。
+    row_range_max = 32, # この行以上の行は出力しない。
      ):
 
     # 返り値
@@ -130,6 +136,10 @@ def expandTo3d(
                     (y_range_max != None and y > y_range_max) or \
                     (z_range_min != None and z < z_range_min) or \
                     (z_range_max != None and z > z_range_max):
+                    continue
+
+                # 範囲外チェック２
+                if ( j < col_range_min or j >= col_range_max or i < row_range_min or i >= row_range_max ):
                     continue
 
                 #リスト追加
@@ -198,6 +208,17 @@ end_frame = 0
 if foundOpt(sys.argv, "-end_frame", i):
     end_frame = int(sys.argv[i[0] + 1])
 
+# 範囲指定２
+col_start = 0
+col_end = 141
+if foundOpt(sys.argv, "-col_range", i):
+    col_start = float(sys.argv[i[0] + 1])
+    col_end = float(sys.argv[i[0] + 2])
+row_start = 0
+row_end = 32
+if foundOpt(sys.argv, "-row_range", i):
+    row_start = float(sys.argv[i[0] + 1])
+    row_end = float(sys.argv[i[0] + 2])
 
 # フレームカウンター
 frame_count = 0
@@ -210,6 +231,8 @@ for line in open(input_file_name):
     x_range_min=x_min, x_range_max=x_max,
     y_range_min=y_min, y_range_max=y_max,
     z_range_min=z_min, z_range_max=z_max,
+    col_range_min=col_start, col_range_max=col_end,
+    row_range_min=row_start, row_range_max=row_end,
     )
 
     # 成功したら
@@ -228,15 +251,7 @@ for line in open(input_file_name):
                 break
 
         # 全フレーム出力の場合
-        #else:
-        #elif (end_frame > 0) and (start_frame <= frame_count < end_frame):
         elif (end_frame == 0) or (start_frame <= frame_count < end_frame):
-
-            # フレーム範囲指定
-#            if frame_count < start_frame:
-                #continue:
-            #elif frame_count >= end_frame:
-             #   break
 
             # 出力ファイル名
             out_filename = OUT_FILE % frame_count
@@ -258,7 +273,6 @@ for line in open(input_file_name):
             outf.close()
 
             # gnuplot 用出力
-            #print("splot '%s' w p" % out_filename)
             print("splot '%s/%s' w p" % (out_dir, out_filename))
             print("pause -1")
 
