@@ -117,17 +117,17 @@ def expandTo3d(
                 # 水平方位角
                 yaw_rad = (sensor_h_angle_start + sensor_h_angle_step * j) * math.pi / 180.0 
 
-                # x 座標値
-                x = dist * math.sin(yaw_rad)
-
-                # y 座標値
-                y = dist * math.cos(yaw_rad)
-
                 # 垂直方位角 [rad]
                 pitch_rad = (sensor_v_angle_start - pitch_deg) * math.pi / 180.0
 
                 # z 座標値
                 z = dist * math.sin(pitch_rad)
+
+                # x 座標値
+                x = dist * math.cos(pitch_rad) * math.sin(yaw_rad)
+
+                # y 座標値
+                y = dist * math.cos(pitch_rad) * math.cos(yaw_rad)
 
                 # 範囲外チェック
                 if (x_range_min != None and x < x_range_min) or \
